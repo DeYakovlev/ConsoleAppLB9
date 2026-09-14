@@ -1,0 +1,264 @@
+﻿using System;
+using System.CodeDom;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace ConsoleAppLB9
+{
+
+    enum Season 
+    {
+        Winter, Spring, Summer, Autumn
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //Task1();
+            //Task2();
+        }
+
+        // Задание 1. Непараметризованные коллекции
+        // Вариант 9
+        public static void Task1() 
+        {
+            Console.WriteLine("---Начало задания 1---");
+            Hashtable ht = new Hashtable();
+
+            DateTime dt = new DateTime(2026,09,09); //0 (DateTime)
+            int i = 9; // 1 (int)
+            double d = 9.99; // 2 (double)
+            float fl = 5.5f; // 3 (float)
+            Season season = Season.Winter;// 4 (enum)
+            DateTime datetime = DateTime.Now; //5 (DateTime)
+            object o = new object(); //6 (object)
+            Person pers = new Person("Валакас","54"); // 7 (class object)
+            (int Id, string CarName) tuple = (1, "BMW"); // 8 (кортеж)
+            int[] array = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // 9 (массив)                                          
+            DateTime dt2 = new DateTime(2024, 3, 15, 14, 30, 45); // 10 (DateTime)
+
+
+            ht.Add(0, dt);
+            ht.Add(1, i);
+            ht.Add(2, d);
+            ht.Add(3, fl);
+            ht.Add(4, season);
+            ht.Add(5, datetime);
+            ht.Add(6, o);
+            ht.Add(7, pers);
+            ht.Add(8, tuple);
+            ht.Add(9, array);
+            ht.Add(10, dt2);
+
+            //Stack<DateTime> stack = new Stack<DateTime>();
+            Stack stack = new Stack();
+
+            List<int> KeyLsit = new List<int> { };
+
+            Console.WriteLine("Hashtable до удаления");
+
+            foreach (DictionaryEntry TableItem in ht) 
+            {
+                Console.WriteLine($"Ключ:{TableItem.Key} Значение:{TableItem.Value}");
+
+                if (TableItem.Value is DateTime)
+                {
+                    stack.Push((DateTime)TableItem.Value);
+                    KeyLsit.Add((int)TableItem.Key);
+                    //ht.Remove(TableItem.Key);
+                }         
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Стек с DateTime из Hashtable");
+            foreach (DateTime StackItem in stack) 
+            {
+                Console.WriteLine(StackItem);
+            }
+
+            foreach (int key in KeyLsit) 
+            {
+                ht.Remove(key);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Hashtable после удаления DateTime");
+            foreach (DictionaryEntry TableItemBefore in ht)
+            {
+                Console.WriteLine($"Ключ:{TableItemBefore.Key} Значение:{TableItemBefore.Value}");
+
+            }
+
+            Console.WriteLine("---Конец задания 1---");
+
+        }
+        // Задание 2. ArrayList
+        public static void Task2() 
+        {
+            Console.WriteLine("---Начало задания 2---");
+            ArrayList aList = new ArrayList();
+
+            DateTime dt = new DateTime(2026, 09, 09); //0 (DateTime)
+            int i = 9; // 1 (int)
+            double d = 9.99; // 2 (double)
+            float fl = 5.5f; // 3 (float)
+            Season season = Season.Winter;// 4 (enum)
+            DateTime datetime = DateTime.Now; //5 (DateTime)
+            object o = new object(); //6 (object)
+            Person pers = new Person("Валакас", "54"); // 7 (class object)
+            (int Id, string CarName) tuple = (1, "BMW"); // 8 (кортеж)
+            int[] array = { 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // 9 (массив)                                          
+            DateTime dt2 = new DateTime(2024, 3, 15, 14, 30, 45); // 10 (DateTime)
+
+            int i2 = 9; // (int)
+            double d2 = 9.99; // (double)
+            float fl2 = 5.5f; // (float)
+            Season season2 = Season.Spring;// (enum)
+            object o2 = new object(); //(object)
+            Person pers2 = new Person("Петров", "27"); // (class object)
+            (int Id, string CarName) tuple2 = (1, "BMW"); //(кортеж)
+            int[] array2 = { 9, 8, 7, 5, 4, 3, 2, 1, 0 }; // (массив)
+
+            aList.Add(dt);
+            aList.Add(i);
+            aList.Add(d);
+            aList.Add(fl);
+            aList.Add(season);
+            aList.Add(datetime);
+            aList.Add(o);
+            aList.Add(pers);
+            aList.Add(tuple);
+            aList.Add(array);
+            aList.Add(dt2);
+            aList.Add(i2);
+            aList.Add(d2);
+            aList.Add(fl2);
+            aList.Add(season2);
+            aList.Add(o2);
+            aList.Add(pers2);
+            aList.Add(tuple2);
+            aList.Add(array2);
+
+
+            ArrayList aListInt = new ArrayList();
+            ArrayList aListDouble = new ArrayList();
+            ArrayList aListDateTime = new ArrayList();
+            ArrayList aListFloat = new ArrayList();
+            ArrayList aListSeason = new ArrayList();
+            ArrayList aListObject = new ArrayList();
+            ArrayList aListPerson = new ArrayList();
+            ArrayList aListTuple = new ArrayList();
+            ArrayList aListArray = new ArrayList();
+
+            //List<ArrayList, string> listName = new List<ArrayList>();
+            Dictionary<string,ArrayList> listName = new Dictionary<string, ArrayList>();
+            listName.Add("aListInt", aListInt);
+            listName.Add("aListDouble", aListDouble);
+            listName.Add("aListDateTime", aListDateTime);
+            listName.Add("aListFloat", aListFloat);
+            listName.Add("aListSeason", aListSeason);
+            listName.Add("aListObject", aListObject);
+            listName.Add("aListPerson", aListPerson);
+            listName.Add("aListTuple", aListTuple);
+            listName.Add("aListArray", aListArray);
+
+
+            //Console.WriteLine(tuple.GetType().Name);
+
+
+            foreach (var item in aList) 
+            {
+                switch (item) 
+                {
+                    case int n : 
+                        aListInt.Add(n);
+                        break;
+                    case double n : 
+                        aListDouble.Add(n);
+                        break;
+                    case DateTime n :
+                        aListDateTime.Add(n);
+                        break;
+                    case float n :
+                        aListFloat.Add(n);
+                        break;
+                    case Season n:
+                        aListSeason.Add(n);
+                        break;
+                    case Person n:
+                        aListPerson.Add(n);
+                        break;
+                    case ValueTuple<int, string> n:
+                        aListTuple.Add(n);
+                        break;
+                    case int[] n :
+                        aListArray.Add(n);
+                        break;
+                    case object n:
+                        aListObject.Add(n);
+                        break;
+
+                }
+            }
+
+
+            Console.WriteLine($"Вывод общую коллекцию");
+            foreach (var item in aList)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Console.WriteLine();
+
+
+
+            foreach (KeyValuePair<string, ArrayList> pair in listName) 
+            {
+                Console.WriteLine($"Вывод отдельню коллекцию - {pair.Key}");
+                foreach (var item in pair.Value)
+                {
+                    Console.WriteLine(item.ToString());
+                }
+                Console.WriteLine();
+            }
+
+            Console.WriteLine("---Конец задания 2---");
+
+
+        }
+
+        public static void Task3() 
+        {
+            ArrayList aList = new ArrayList();
+
+        }
+        
+
+
+
+        // Задание 1. Непараметризованные коллекции
+        class Person 
+        {
+            string Name { get; set; }
+            string Age { get; set; }
+
+            public Person(string name, string age) 
+            {
+                Name = name;
+                Age = age;
+            }
+
+            public override string ToString()
+            {
+                return $"Имя: {Name} Возраст: {Age}";
+            }
+        }
+    }
+}
