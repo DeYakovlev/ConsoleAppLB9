@@ -260,5 +260,237 @@ namespace ConsoleAppLB9
                 return $"Имя: {Name} Возраст: {Age}";
             }
         }
+
+        //Задание 3 
+        interface IMovable
+        {
+            void Move();
+            void Stop();
+            string GetStatus();
+
+        }
+
+        interface IServicable
+        {
+            void Service();
+            void Stop();
+            int GetServiceInterval();
+
+        }
+
+        class Vehicle : IMovable
+        {
+            public string Name { get; set; }
+            protected bool isMoving;
+
+            public Vehicle(string name)
+            {
+                Name = name;
+                isMoving = false;
+            }
+
+            public void Move()
+            {
+                isMoving = true;
+                Console.WriteLine($"{Name}Начинает дважение");
+            }
+
+            public void Stop()
+            {
+                isMoving = false;
+                Console.WriteLine($"{Name}Прекращает движение");
+            }
+
+            public virtual string GetStatus()
+            {
+                return isMoving ? "В движении" : "Стоит";
+            }
+
+            public override string ToString()
+            {
+                return $"[Vehicle] {Name}, статус: {GetStatus()}";
+            }
+
+        }
+
+        class SerciceStation : IServicable
+        {
+            public string StationName { get; set; }
+            protected bool isServicing;
+
+            public SerciceStation(string name)
+            {
+                StationName = name;
+                isServicing = false;
+            }
+
+            public void Service()
+            {
+                isServicing = true;
+                Console.WriteLine($"{StationName} Начинает обслуживание");
+            }
+
+
+            public void Stop()
+            {
+                isServicing = false;
+                Console.WriteLine($"{StationName} Заканчивает обслуживание");
+            }
+
+            public int GetServiceInterval()
+            {
+                return 9000; 
+            }
+
+            public override string ToString()
+            {
+                return $"[SeviceStation]{StationName}, статус: {(isServicing ? "обслуживает" : "Свободна")}";
+            }
+
+            class CarGlued : Vehicle, IMovable, IServicable
+            {
+                private bool isUnderService;
+
+                public CarGlued(string name) : base(name) { }
+
+                public new void Stop()
+                {
+                    isMoving = false;
+                    isUnderService = false;
+                    Console.WriteLine($"[CarGlued] {Name} Общая остановка движение + обслуживаение");
+                }
+
+                public void Service()
+                {
+                    isUnderService = true;
+                    Console.WriteLine($"[CarGlued] {Name} Начинаю обслуживание");
+                }
+
+                public int GetServiceInterval()
+                {
+                    return 15000;
+                }
+
+                public override string ToString()
+                {
+                    return $"[CarGlued] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
+                }
+
+            }
+
+            class CarExplict : Vehicle, IMovable, IServicable
+            {
+                private bool isUnderService;
+
+                public CarExplict(string name) : base(name) { }
+
+                void IMovable.Stop()
+                {
+                    isMoving = false;
+                    Console.WriteLine($"[CarExplict]{Name} Остановка движения (IMovable)");
+                }
+
+                void IServicable.Stop()
+                {
+                    isUnderService = false;
+                    Console.WriteLine($"[CarExplict]{Name} Остановка обслуживания (IServicable)");
+                }
+
+                public void Service()
+                {
+                    isUnderService = true;
+                    Console.WriteLine($"[CarExplict]{Name} Начинаю обслуживание");
+                }
+
+                public int GetServiceInterval()
+                {
+                    return 15000;
+                }
+
+                public override string ToString()
+                {
+                    return $"[CarExplict] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
+                }
+
+            }
+
+
+            class CarWrepped : Vehicle, IMovable, IServicable
+            {
+                private bool isUnderService;
+                public CarWrepped(string name) : base(name) { }
+
+
+                public void StopMovement()
+                {
+                    isMoving = false;
+                    Console.WriteLine($"[CarWrepped]{Name} Останавливаю движение(через обертку StopMovement)");
+                }
+
+                public void StopService()
+                {
+                    isUnderService = false;
+                    Console.WriteLine($"[CarWrepped]{Name} Останавливаю обслуживание(через обертку StopService)");
+                }
+
+                void IMovable.Stop()
+                {
+                    StopMovement();
+                }
+
+                void IServicable.Stop()
+                {
+                    StopService();
+                }
+
+                public void Service()
+                {
+                    isUnderService = true;
+                    Console.WriteLine($"[CarWrepped]{Name} Начинаю обслуживание");
+                }
+
+                public int GetServiceInterval()
+                {
+                    return 15000;
+                }
+
+                public override String ToString()
+                {
+                    return $"[CarWrepped] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
+                }
+            }
+
+            class Car : Vehicle
+            {
+                public int FuelLevel { get; set; }
+
+                public Car(string name) : base(name)
+                {
+                    FuelLevel = 0;
+                }
+
+                public void Refuel(int fuel)
+                {
+                    FuelLevel = fuel;
+                    Console.WriteLine($"{Name} заполнен до {FuelLevel}");
+                }
+
+                public override string ToString()
+                {
+                    return ($"[Car]{Name}, статус {GetStatus()}, топливо: {FuelLevel}");
+                }
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
     }
 }
