@@ -321,46 +321,134 @@ namespace ConsoleAppLB9
                             }
                         case 4:
                             {
-                                Console.WriteLine("Нахождение эллемента по имени сначала коллекции");
+                                Console.WriteLine("Нахождение эллемента по имени с начала коллекции");
                                 Console.WriteLine("Введите имя для поиска:");
                                 string searchName = Console.ReadLine();
                                 Vehicle searchVehicle = new Vehicle(searchName);
 
                                 int index = list.IndexOf(searchVehicle);
-                                
-                                //if ()
 
-
+                                if (index != -1)
+                                {
+                                    Console.WriteLine($"Найден эллемент ({list[index]}) под индексом {index}");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Эллемент с таким именем не найден");
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 5:
                             {
-                                Console.WriteLine("Заглушка5");
+                                Console.WriteLine("Нахождение эллемента по имени с конца коллекции");
+                                Console.WriteLine("Введите имя для поиска:");
+                                string searchName = Console.ReadLine();
+                                Vehicle searchVehicle = new Vehicle(searchName);
+
+                                int index = list.LastIndexOf(searchVehicle);
+
+                                if (index != -1)
+                                {
+                                    Console.WriteLine($"Найден эллемент ({list[index]}) под индексом {index}");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Эллемент с таким именем не найден");
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 6:
                             {
-                                Console.WriteLine("Заглушка6");
+                                Console.WriteLine("Удаление эллемента по индексу");
+                                if (list.Count == 0)
+                                {
+                                    Console.WriteLine("Удаление невозможно , коллекция пуста(((");
+                                    break;
+                                }
+                                Console.WriteLine($"Введите индекс(текущее диапазон интектов от 0 до {list.Count - 1}):");
+
+                                if (!int.TryParse(Console.ReadLine(), out int index) || index < 0 || index > list.Count - 1)
+                                {
+                                    Console.WriteLine("Индекс должен находиться в границах этого списка.\n");
+                                    Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                    Console.ReadKey();
+                                    break;
+                                }                               
+                                list.RemoveAt(index);
+                                Console.WriteLine($"Эллемент с индексом {index} успешно удален");
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 7:
                             {
-                                Console.WriteLine("Заглушка7");
+                                Console.WriteLine("Удаление эллемента по имени ");
+
+                                if (list.Count == 0)
+                                {
+                                    Console.WriteLine("Список пуст, удаление невозможно");
+                                    Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                    Console.ReadKey();
+                                    break;
+                                }
+
+                                Console.WriteLine("Введите имя для поиска:");
+                                string searchName = Console.ReadLine();
+                                Vehicle searchVehicle = new Vehicle(searchName);
+
+                                bool isDelete = list.Remove(searchVehicle);
+
+
+                                if (isDelete)
+                                {
+                                    Console.WriteLine($"Эллемент c именем {searchName} удален!");
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Эллемент с таким именем не найден");
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 8:
                             {
-                                Console.WriteLine("Заглушка8");
+                                Console.WriteLine("реверс коллекции");
+                                list.Reverse();
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 9:
                             {
-                                Console.WriteLine("Заглушка9");
+                                Console.WriteLine("Cортировка");
+                                list.Sort();
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                         case 10:
                             {
-                                Console.WriteLine("Заглушка10");
+                                Console.WriteLine("Выполнение методов объектов, поддерживающих IServicable:");
+                                foreach (Vehicle item in list)
+                                {
+                                    if (item is IServicable servicable)
+                                    {
+                                        Console.WriteLine($"{item.Name} поддерживает IServicable:");
+                                        servicable.Service();
+                                        Console.WriteLine($"Интервал обслуживания: {servicable.GetServiceInterval()}");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"{item.Name} НЕ поддерживает IServicable");
+                                    }
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
                                 break;
                             }
                     }                 
@@ -407,10 +495,6 @@ namespace ConsoleAppLB9
         }
 
 
-
-
-
-
         // Задание 1. Непараметризованные коллекции
         class Person 
         {
@@ -446,7 +530,7 @@ namespace ConsoleAppLB9
 
         }
 
-       public class Vehicle : IMovable
+       public class Vehicle : IMovable, IComparable<Vehicle>
         {
             public string Name { get; set; }
             protected bool isMoving;
@@ -486,7 +570,19 @@ namespace ConsoleAppLB9
                     return this.Name == other.Name;
                 }
                 return false;
-            } 
+            }
+
+            public override int GetHashCode()
+            {
+                return Name?.GetHashCode() ?? 0;
+            }
+
+            public int CompareTo(Vehicle other)
+            {
+                if (other == null)
+                    return 1;
+                return this.Name.CompareTo(other.Name);
+            }
 
         }
 
