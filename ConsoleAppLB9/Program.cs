@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -24,6 +26,7 @@ namespace ConsoleAppLB9
         {
             //Task1();
             //Task2();
+            Task3();
         }
 
         // Задание 1. Непараметризованные коллекции
@@ -236,10 +239,175 @@ namespace ConsoleAppLB9
 
         public static void Task3() 
         {
-            ArrayList aList = new ArrayList();
+            List<Vehicle> list = new List<Vehicle>();
+
+            Vehicle vehicle1 = new Vehicle("Vehicle");
+            Car car1 = new Car("BMW");
+            CarGlued carGlued = new CarGlued("Honda");
+            CarExplict carExplict = new CarExplict("Mercedes");
+            CarWrepped carWrepped = new CarWrepped("Lexus");
+
+            list.Add(vehicle1);
+            list.Add(car1);
+            list.Add(carGlued);
+            list.Add (carExplict);
+            list.Add(carWrepped);
+            int key;
+
+            while (true) 
+            {
+                Console.WriteLine("1 – просмотр коллекции\n" +
+                    "2 – добавление элемента (данные вводим с клавиатуры)\n" +
+                    "3 – добавление элемента по указанному индексу (индекс и данные вводим с клавиатуры)\n" +
+                    "4 – нахождение элемента с начала коллекции (переопределить метод Equals или\r\nоператор == для вашего класса – сравнение только по полю name) " +
+                    "(данные для поиска\r\nпо полю name вводим с клавиатуры, вы должны иметь минимум 2 объекта в коллекции\r\nс одинаковыми именами)\n" +
+                    "5 – нахождение элемента с конца коллекции (данные для поиска по полю name\r\nвводим с клавиатуры, вы должны иметь минимум 2 объекта в коллекции с\r\nодинаковыми именами)\r\n" +
+                    "6 – удаление элемента по индексу (индекс вводим с клавиатуры)\n" +
+                    "7 – удаление элемента по значению (данные для поиска по полю name вводим с\r\nклавиатуры)\n" +
+                    "8 – реверс коллекции\n" +
+                    "9 – сортировка\n" +
+                    "10 – выполнение методов всех объектов, поддерживающих Interface2\n" +
+                    "0 - выход");
+                Console.WriteLine();
+                Console.WriteLine("Введите число из меню:");
+
+                if (int.TryParse(Console.ReadLine(), out key) && key >= 0 && key <= 10)
+                {
+                    //Console.WriteLine("Тут будет пожилой кейс");
+
+                    switch (key) 
+                    {
+                        case 0: 
+                            {
+                                Console.WriteLine("Выходим из приложения...");
+                                return;
+                            }
+                        case 1:
+                            {
+                                Console.WriteLine("Просмотр коллекции:");
+                                foreach (Vehicle item in list)
+                                    Console.WriteLine(item);
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+                            }
+                        case 2:
+                            {
+                                Console.WriteLine("Добавление эллемента:");
+
+                                Vehicle vehicle = CreateVehicleTask3();
+                                list.Add (vehicle);
+                                Console.WriteLine("Элемент добавлен");
+
+                                break;
+                            }
+                        case 3:
+                            {
+                                Console.WriteLine("Добавление эллемента по индексу");
+                                Console.WriteLine($"Введите индекс(текущее диапазон интектов от 0 до {list.Count}):");
+                                //int index = int.Parse(Console.ReadLine());
+                                
+                                if (!int.TryParse(Console.ReadLine(), out int index)||index < 0 || index > list.Count) 
+                                {
+                                    Console.WriteLine("Индекс должен находиться в границах этого списка.\n");
+                                    Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                    Console.ReadKey();
+                                    break;
+                                }
+                                Vehicle vehicle = CreateVehicleTask3();
+
+                                list.Insert(index, vehicle);
+                                break;
+                            }
+                        case 4:
+                            {
+                                Console.WriteLine("Нахождение эллемента по имени сначала коллекции");
+                                Console.WriteLine("Введите имя для поиска:");
+                                string searchName = Console.ReadLine();
+                                Vehicle searchVehicle = new Vehicle(searchName);
+
+                                int index = list.IndexOf(searchVehicle);
+                                
+                                //if ()
+
+
+                                break;
+                            }
+                        case 5:
+                            {
+                                Console.WriteLine("Заглушка5");
+                                break;
+                            }
+                        case 6:
+                            {
+                                Console.WriteLine("Заглушка6");
+                                break;
+                            }
+                        case 7:
+                            {
+                                Console.WriteLine("Заглушка7");
+                                break;
+                            }
+                        case 8:
+                            {
+                                Console.WriteLine("Заглушка8");
+                                break;
+                            }
+                        case 9:
+                            {
+                                Console.WriteLine("Заглушка9");
+                                break;
+                            }
+                        case 10:
+                            {
+                                Console.WriteLine("Заглушка10");
+                                break;
+                            }
+                    }                 
+                    //break;
+
+                }
+                else 
+                {
+                    Console.WriteLine("неверное значение");
+                    Console.WriteLine();
+                }
+                    
+
+
+            }
+
+ 
+
+            
 
         }
-        
+
+        public static Vehicle CreateVehicleTask3() 
+        {
+            Console.WriteLine("Выберите тип: 1-Vehicle, 2-Car, 3-CarGlued, 4-CarExplict, 5-CarWrepped");
+            int classChois = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("Введите имя:");
+            string name = Console.ReadLine();
+
+
+
+            switch (classChois) 
+            {
+                case 1: return new Vehicle(name);
+                case 2 : return new Car(name);
+                case 3 : return new CarGlued(name);
+                case 4 : return new CarExplict(name);
+                case 5: return new CarWrepped(name);
+                default : Console.WriteLine("Неверный выбор, создан Vehicle по умолчанию");
+                    return new Vehicle(name);
+            }
+
+        }
+
+
+
 
 
 
@@ -278,7 +446,7 @@ namespace ConsoleAppLB9
 
         }
 
-        class Vehicle : IMovable
+       public class Vehicle : IMovable
         {
             public string Name { get; set; }
             protected bool isMoving;
@@ -310,6 +478,15 @@ namespace ConsoleAppLB9
             {
                 return $"[Vehicle] {Name}, статус: {GetStatus()}";
             }
+
+            public override bool Equals(object obj)
+            {
+                if (obj is Vehicle other)
+                {
+                    return this.Name == other.Name;
+                }
+                return false;
+            } 
 
         }
 
@@ -347,150 +524,141 @@ namespace ConsoleAppLB9
                 return $"[SeviceStation]{StationName}, статус: {(isServicing ? "обслуживает" : "Свободна")}";
             }
 
-            class CarGlued : Vehicle, IMovable, IServicable
+        }
+
+        class CarGlued : Vehicle, IMovable, IServicable
+        {
+            private bool isUnderService;
+
+            public CarGlued(string name) : base(name) { }
+
+            public new void Stop()
             {
-                private bool isUnderService;
-
-                public CarGlued(string name) : base(name) { }
-
-                public new void Stop()
-                {
-                    isMoving = false;
-                    isUnderService = false;
-                    Console.WriteLine($"[CarGlued] {Name} Общая остановка движение + обслуживаение");
-                }
-
-                public void Service()
-                {
-                    isUnderService = true;
-                    Console.WriteLine($"[CarGlued] {Name} Начинаю обслуживание");
-                }
-
-                public int GetServiceInterval()
-                {
-                    return 15000;
-                }
-
-                public override string ToString()
-                {
-                    return $"[CarGlued] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
-                }
-
+                isMoving = false;
+                isUnderService = false;
+                Console.WriteLine($"[CarGlued] {Name} Общая остановка движение + обслуживаение");
             }
 
-            class CarExplict : Vehicle, IMovable, IServicable
+            public void Service()
             {
-                private bool isUnderService;
-
-                public CarExplict(string name) : base(name) { }
-
-                void IMovable.Stop()
-                {
-                    isMoving = false;
-                    Console.WriteLine($"[CarExplict]{Name} Остановка движения (IMovable)");
-                }
-
-                void IServicable.Stop()
-                {
-                    isUnderService = false;
-                    Console.WriteLine($"[CarExplict]{Name} Остановка обслуживания (IServicable)");
-                }
-
-                public void Service()
-                {
-                    isUnderService = true;
-                    Console.WriteLine($"[CarExplict]{Name} Начинаю обслуживание");
-                }
-
-                public int GetServiceInterval()
-                {
-                    return 15000;
-                }
-
-                public override string ToString()
-                {
-                    return $"[CarExplict] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
-                }
-
+                isUnderService = true;
+                Console.WriteLine($"[CarGlued] {Name} Начинаю обслуживание");
             }
 
-
-            class CarWrepped : Vehicle, IMovable, IServicable
+            public int GetServiceInterval()
             {
-                private bool isUnderService;
-                public CarWrepped(string name) : base(name) { }
-
-
-                public void StopMovement()
-                {
-                    isMoving = false;
-                    Console.WriteLine($"[CarWrepped]{Name} Останавливаю движение(через обертку StopMovement)");
-                }
-
-                public void StopService()
-                {
-                    isUnderService = false;
-                    Console.WriteLine($"[CarWrepped]{Name} Останавливаю обслуживание(через обертку StopService)");
-                }
-
-                void IMovable.Stop()
-                {
-                    StopMovement();
-                }
-
-                void IServicable.Stop()
-                {
-                    StopService();
-                }
-
-                public void Service()
-                {
-                    isUnderService = true;
-                    Console.WriteLine($"[CarWrepped]{Name} Начинаю обслуживание");
-                }
-
-                public int GetServiceInterval()
-                {
-                    return 15000;
-                }
-
-                public override String ToString()
-                {
-                    return $"[CarWrepped] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
-                }
+                return 15000;
             }
 
-            class Car : Vehicle
+            public override string ToString()
             {
-                public int FuelLevel { get; set; }
-
-                public Car(string name) : base(name)
-                {
-                    FuelLevel = 0;
-                }
-
-                public void Refuel(int fuel)
-                {
-                    FuelLevel = fuel;
-                    Console.WriteLine($"{Name} заполнен до {FuelLevel}");
-                }
-
-                public override string ToString()
-                {
-                    return ($"[Car]{Name}, статус {GetStatus()}, топливо: {FuelLevel}");
-                }
+                return $"[CarGlued] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
             }
 
+        }
+
+        class CarExplict : Vehicle, IMovable, IServicable
+        {
+            private bool isUnderService;
+
+            public CarExplict(string name) : base(name) { }
+
+            void IMovable.Stop()
+            {
+                isMoving = false;
+                Console.WriteLine($"[CarExplict]{Name} Остановка движения (IMovable)");
+            }
+
+            void IServicable.Stop()
+            {
+                isUnderService = false;
+                Console.WriteLine($"[CarExplict]{Name} Остановка обслуживания (IServicable)");
+            }
+
+            public void Service()
+            {
+                isUnderService = true;
+                Console.WriteLine($"[CarExplict]{Name} Начинаю обслуживание");
+            }
+
+            public int GetServiceInterval()
+            {
+                return 15000;
+            }
+
+            public override string ToString()
+            {
+                return $"[CarExplict] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
+            }
 
         }
 
 
+        class CarWrepped : Vehicle, IMovable, IServicable
+        {
+            private bool isUnderService;
+            public CarWrepped(string name) : base(name) { }
 
 
+            public void StopMovement()
+            {
+                isMoving = false;
+                Console.WriteLine($"[CarWrepped]{Name} Останавливаю движение(через обертку StopMovement)");
+            }
 
+            public void StopService()
+            {
+                isUnderService = false;
+                Console.WriteLine($"[CarWrepped]{Name} Останавливаю обслуживание(через обертку StopService)");
+            }
 
+            void IMovable.Stop()
+            {
+                StopMovement();
+            }
 
+            void IServicable.Stop()
+            {
+                StopService();
+            }
 
+            public void Service()
+            {
+                isUnderService = true;
+                Console.WriteLine($"[CarWrepped]{Name} Начинаю обслуживание");
+            }
+
+            public int GetServiceInterval()
+            {
+                return 15000;
+            }
+
+            public override String ToString()
+            {
+                return $"[CarWrepped] {Name}, движение: {isMoving}, обслуживание: {isUnderService}";
+            }
+        }
+
+        class Car : Vehicle
+        {
+            public int FuelLevel { get; set; }
+
+            public Car(string name) : base(name)
+            {
+                FuelLevel = 0;
+            }
+
+            public void Refuel(int fuel)
+            {
+                FuelLevel = fuel;
+                Console.WriteLine($"{Name} заполнен до {FuelLevel}");
+            }
+
+            public override string ToString()
+            {
+                return ($"[Car]{Name}, статус {GetStatus()}, топливо: {FuelLevel}");
+            }
+        }
 
     }
 }
