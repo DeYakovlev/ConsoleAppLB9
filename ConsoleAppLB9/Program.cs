@@ -26,7 +26,8 @@ namespace ConsoleAppLB9
         {
             //Task1();
             //Task2();
-            Task3();
+            //Task3();
+            Task4();
         }
 
         // Задание 1. Непараметризованные коллекции
@@ -471,6 +472,289 @@ namespace ConsoleAppLB9
 
         }
 
+        public static void Task4() 
+        {
+            Dictionary <string, Vehicle> dictionary = new Dictionary<string, Vehicle>();
+
+            Vehicle vehicle1 = new Vehicle("Vehicle");
+            Car car1 = new Car("BMW");
+            CarGlued carGlued = new CarGlued("Honda");
+            CarExplict carExplict = new CarExplict("Mercedes");
+            CarWrepped carWrepped = new CarWrepped("Lexus");
+
+            dictionary.Add("Vehicle", vehicle1);
+            dictionary.Add("BMW", car1);
+            dictionary.Add("Honda", carGlued);
+            dictionary.Add("Mercedes", carExplict);
+            dictionary.Add("Lexus", carWrepped);
+            int inputKey;
+
+            while (true) 
+            {
+                Console.WriteLine(" 1 - просмотр коллекции\n" +
+                                  " 2 - добавление элемента\n" +
+                                  " 3 - добавление/обновление по ключу\n" +
+                                  " 4 - поиск по ключу\n" +
+                                  " 5 - поиск по значению\n" +
+                                  " 6 - уаление по ключу\n" +
+                                  " 7 - удаление по значению\n" +
+                                  " 8 - реверс через LINQ\n" +
+                                  " 9 - сортировка через LINQ\n" +
+                                  "10 - выполнение методов объектов, поддерживающих IServicable\n" +
+                                  " 0 - выход\n");
+                Console.WriteLine();
+                Console.WriteLine("Введите число из меню:");
+                if(int.TryParse(Console.ReadLine(),out inputKey) && inputKey >= 0 && inputKey <= 10) 
+                {
+                    switch (inputKey) 
+                    {
+                        case 0: 
+                            {
+                                Console.WriteLine("Выходим из приложения...");
+                                return;
+                            }
+                        case 1:
+                            {
+                                Console.WriteLine("Просмотр коллекции:");
+                                foreach (KeyValuePair<string,Vehicle> pair in dictionary) 
+                                {
+                                    Console.WriteLine($"Ключ: {pair.Key}, Значение: {pair.Value}");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+                            }
+                        case 2:
+                            {
+                                Console.WriteLine("Добавление эллемента:");
+
+                                Vehicle vehicle = CreateVehicleTask4(dictionary);
+                                //list.Add(vehicle);
+                                if (vehicle != null) 
+                                {
+                                    dictionary.Add(vehicle.Name, vehicle);
+                                    Console.WriteLine("Элемент добавлен");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Элемент не добавлен");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+
+                                break;
+                            }
+                        case 3:
+                            {
+                                Console.WriteLine("добавление/обновление по ключу:");
+
+                                bool isupdate = false;
+                                Vehicle vehicle = CreateVehicleForUpdateTask4(dictionary, out isupdate);
+                                dictionary[vehicle.Name] = vehicle;
+
+                                if (isupdate)
+                                {
+                                    Console.WriteLine("Элемент обновлен");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Элемент добавлен");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+
+                                break;
+                            }
+                        case 4:
+                            {
+                                Console.WriteLine("Введите ключ для поиска");
+                                string searchKey = Console.ReadLine();
+
+                                if (dictionary.TryGetValue(searchKey, out Vehicle foundValue)) 
+                                {
+                                    Console.WriteLine($"Найден элемент по ключу {searchKey}: {foundValue} "); 
+                                }
+                                else 
+                                {
+                                    Console.WriteLine("Элемент с таким ключем не найден");
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+                            }
+                        case 5:
+                            {
+                                Console.WriteLine("поиск по значению");
+
+                                Console.WriteLine("Введите тип класса для поиска (Vehicle, Car, CarGlued, CarExplict, CarWrepped):");
+                                string typeName = Console.ReadLine();
+                                Vehicle found = null;
+
+                                foreach(var pair in dictionary) 
+                                {
+                                    if(pair.Value.GetType().Name == typeName) 
+                                    {
+                                        found = pair.Value;
+                                        break;
+                                    }
+                                }
+
+                                if (found != null) 
+                                {
+                                    Console.WriteLine($"Найден элемент: {found}");
+                                }
+                                else 
+                                {
+                                    Console.WriteLine($"Элемент с таким типом не найден");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+
+                                break;
+                            }
+                        case 6:
+                            {
+                                Console.WriteLine("уаление по ключу\n");
+                                if (dictionary.Count == 0)
+                                {
+                                    Console.WriteLine("Словарь пуст, удаление невозможно");
+                                    Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                    Console.ReadKey();
+                                    break;
+                                }
+
+                                Console.WriteLine("Введите ключ для удаления:");
+                                string key = Console.ReadLine();
+
+                                bool removed = dictionary.Remove(key);
+
+                                if (removed)
+                                {
+                                    Console.WriteLine($"Элемент с ключом '{key}' удалён");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Элемент с таким ключом не найден");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+
+
+                            }
+                        case 7:
+                            {
+                                Console.WriteLine("уаление по ключу\n");
+                                if (dictionary.Count == 0)
+                                {
+                                    Console.WriteLine("Словарь пуст, удаление невозможно");
+                                    Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                    Console.ReadKey();
+                                    break;
+                                }
+
+                                Console.WriteLine("Введите тип класса для удаления (Vehicle, Car, CarGlued, CarExplict, CarWrepped):");
+                                string typeName = Console.ReadLine();
+
+                                string keyToRemove = null;
+                                foreach (var pair in dictionary)
+                                {
+                                    if (pair.Value.GetType().Name == typeName)
+                                    {
+                                        keyToRemove = pair.Key;
+                                        break;
+                                    }
+                                }
+
+                                if (keyToRemove != null)
+                                {
+                                    dictionary.Remove(keyToRemove);
+                                    Console.WriteLine($"Элемент с ключом '{keyToRemove}' (тип {typeName}) удалён");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Элемент с таким типом не найден");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+
+
+                            }
+                        case 8:
+                            {
+                                Console.WriteLine("Реверс коллекции (через LINQ):");
+                                var reversedPairs = dictionary.Reverse();
+
+                                foreach (var pair in reversedPairs)
+                                {
+                                    Console.WriteLine($"{pair.Key}: {pair.Value}");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+
+
+
+                            }
+                        case 9:
+                            {
+                                Console.WriteLine("Сортировка коллекции (через LINQ, по ключу):");
+                                var sortedPairs = dictionary.OrderBy(pair => pair.Key);
+
+                                foreach (var pair in sortedPairs)
+                                {
+                                    Console.WriteLine($"{pair.Key}: {pair.Value}");
+                                }
+
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+                            }
+                        case 10:
+                            {
+                                Console.WriteLine("Выполнение методов объектов, поддерживающих IServicable:");
+                                foreach (var item in dictionary)
+                                {
+                                    if (item.Value is IServicable servicable)
+                                    {
+                                        Console.WriteLine($"{item.Key} поддерживает IServicable:");
+                                        servicable.Service();
+                                        Console.WriteLine($"Интервал обслуживания: {servicable.GetServiceInterval()}");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"{item.Key} НЕ поддерживает IServicable");
+                                    }
+                                }
+                                Console.WriteLine("\nНажмите любую кнопку, чтобы продолжить...\n");
+                                Console.ReadKey();
+                                break;
+                            }
+                    }
+
+                }
+                else 
+                {
+                    Console.WriteLine("неверное значение");
+                    Console.WriteLine();
+
+                }
+
+
+            }
+
+
+
+        }
+
         public static Vehicle CreateVehicleTask3() 
         {
             Console.WriteLine("Выберите тип: 1-Vehicle, 2-Car, 3-CarGlued, 4-CarExplict, 5-CarWrepped");
@@ -491,6 +775,94 @@ namespace ConsoleAppLB9
                 default : Console.WriteLine("Неверный выбор, создан Vehicle по умолчанию");
                     return new Vehicle(name);
             }
+
+        }
+
+        public static Vehicle CreateVehicleTask4(Dictionary<string,Vehicle> vehicleDictionary)
+        {
+
+            Console.WriteLine("Введите ключ(имя):");
+            string name = Console.ReadLine();
+
+            if (vehicleDictionary.ContainsKey(name))
+            {
+                Console.WriteLine($"Элемент с таким {name} именем (ключом) уже существует!");
+                return null;
+            }
+
+            else
+            {
+
+
+                Console.WriteLine("Выберите тип: 1-Vehicle, 2-Car, 3-CarGlued, 4-CarExplict, 5-CarWrepped");
+                //int classChois = int.Parse(Console.ReadLine());
+
+                if (!int.TryParse(Console.ReadLine(), out int classChois))
+                {
+                    Console.WriteLine("Некорректный ввод, создан Vehicle по умолчанию");
+                    return new Vehicle(name);
+                }
+
+
+
+
+
+                switch (classChois)
+                {
+                    case 1: return new Vehicle(name);
+                    case 2: return new Car(name);
+                    case 3: return new CarGlued(name);
+                    case 4: return new CarExplict(name);
+                    case 5: return new CarWrepped(name);
+                    default:
+                        Console.WriteLine("Неверный выбор, создан Vehicle по умолчанию");
+                        return new Vehicle(name);
+                }
+
+            }
+
+        }
+
+        public static Vehicle CreateVehicleForUpdateTask4(Dictionary<string, Vehicle> vehicleDictionary, out bool isupdate)
+        {
+            isupdate = false;
+            Console.WriteLine("Введите ключ(имя):");
+            string name = Console.ReadLine();
+
+            if (vehicleDictionary.ContainsKey(name))
+            {
+                Console.WriteLine($"Элемент с таким {name} именем (ключом) уже существует и будет перезаписан!");
+                isupdate = true;
+                //return null;
+            }
+
+
+
+                Console.WriteLine("Выберите тип: 1-Vehicle, 2-Car, 3-CarGlued, 4-CarExplict, 5-CarWrepped");
+                //int classChois = int.Parse(Console.ReadLine());
+
+                if (!int.TryParse(Console.ReadLine(), out int classChois))
+                {
+                    Console.WriteLine("Некорректный ввод, создан Vehicle по умолчанию");
+                    return new Vehicle(name);
+                }
+
+
+
+
+
+                switch (classChois)
+                {
+                    case 1: return new Vehicle(name);
+                    case 2: return new Car(name);
+                    case 3: return new CarGlued(name);
+                    case 4: return new CarExplict(name);
+                    case 5: return new CarWrepped(name);
+                    default:
+                        Console.WriteLine("Неверный выбор, создан Vehicle по умолчанию");
+                        return new Vehicle(name);
+                }
+
 
         }
 
